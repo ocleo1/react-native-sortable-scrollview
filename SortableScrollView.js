@@ -17,10 +17,12 @@ var {
   Text,
   View,
   ScrollView,
-  PanResponder
+  PanResponder,
+  NativeModules
 } = React;
 
-const SCROLL_VIEW_TOP = 0; // based on the layout
+var UIManager = NativeModules.UIManager;
+
 const LONG_PRESS_THRESHOLD = 100;
 const INTERVAL = 15;
 const ITEM_VIEW_HEIGHT = 89; // marginTop + marginBottom + paddingTop + paddingBottom + itemHeight + 1
@@ -39,6 +41,7 @@ var SortableScrollView = React.createClass({
         items: [].concat(ITEMS), // Clone
         newIndex: -1,
         contentOffsetY: 0,
+        scrollViewTop: 0,
         timer: 0,
         moveable: false
       }
@@ -60,7 +63,7 @@ var SortableScrollView = React.createClass({
       onMoveShouldSetPanResponder: ()=> true,
       onPanResponderGrant: (evt, gs)=>{
         console.log('item grant');
-        self.state.currentItemIndex = Math.floor((self.state.contentOffsetY + evt.nativeEvent.pageY - SCROLL_VIEW_TOP) / ITEM_VIEW_HEIGHT);
+        self.state.currentItemIndex = Math.floor((self.state.contentOffsetY + evt.nativeEvent.pageY - self.state.scrollViewTop) / ITEM_VIEW_HEIGHT);
         console.log(self.state.currentItemIndex);
         self.timerId = self.setInterval(self._tikTok, INTERVAL);
       },
@@ -106,7 +109,12 @@ var SortableScrollView = React.createClass({
   },
 
   componentDidMount() {
-    // ...
+    var self = this;
+    var scrollViewHandle = React.findNodeHandle(this.refs.scrollView);
+    // measure scroll view component top value
+    UIManager.measure(scrollViewHandle, (frameX, frameY, width, height, pageX, pageY) => {
+      self.state.scrollViewTop = pageY;
+    });
   },
 
   _tikTok() {
@@ -130,6 +138,7 @@ var SortableScrollView = React.createClass({
     return (
       <View style={styles.container}>
         <ScrollView
+          ref="scrollView"
           style={styles.scrollView}
           onScroll={this._onScroll}
           scrollEventThrottle={200}>
