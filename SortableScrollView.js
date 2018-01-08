@@ -9,7 +9,8 @@
  */
 'use strict';
 
-var React = require('react-native');
+var React = require('react');
+var ReactNative = require('react-native');
 var TimerMixin = require('react-timer-mixin');
 
 var {
@@ -19,7 +20,7 @@ var {
   ScrollView,
   PanResponder,
   NativeModules
-} = React;
+} = ReactNative;
 
 var UIManager = NativeModules.UIManager;
 
@@ -110,7 +111,7 @@ var SortableScrollView = React.createClass({
 
   componentDidMount() {
     var self = this;
-    var scrollViewHandle = React.findNodeHandle(this.refs.scrollView);
+    var scrollViewHandle = ReactNative.findNodeHandle(this.refs.scrollView);
     // measure scroll view component top value
     UIManager.measure(scrollViewHandle, (frameX, frameY, width, height, pageX, pageY) => {
       self.state.scrollViewTop = pageY;
