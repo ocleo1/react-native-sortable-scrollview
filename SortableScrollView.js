@@ -50,15 +50,6 @@ var SortableScrollView = React.createClass({
 
   componentWillMount(){
     var self = this;
-    this._itemWrapperResponder = {
-      onStartShouldSetResponder: ()=> false,
-      onMoveShouldSetResponder: ()=> true,
-      onResponderGrant: ()=>{ console.log('wrapper grant') },
-      onResponderMove: ()=>{ console.log('wrapper move') },
-      onResponderRelease: ()=>{ console.log('wrapper release') },
-      onResponderTerminationRequest: ()=>{ console.log('wrapper termination request') },
-      onResponderTerminate: ()=>{ console.log('wrapper terminate') }
-    },
     this._itemPanResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true,
       onMoveShouldSetPanResponder: ()=> true,
@@ -143,28 +134,24 @@ var SortableScrollView = React.createClass({
           style={styles.scrollView}
           onScroll={this._onScroll}
           scrollEventThrottle={200}>
-          <View
-            {...this._itemWrapperResponder}
-            style={styles.itemViewWrapper}>
-            {
-              this.state.items.map((item, i) => {
-                var backgroundColor;
-                if (this.state.newIndex == i) {
-                  backgroundColor = 'red';
-                } else {
-                  backgroundColor = '#eaeaea';
-                }
-                return (
-                  <View
-                    {...this._itemPanResponder.panHandlers}
-                    style={[styles.itemView, {"backgroundColor": backgroundColor}]}
-                    key={i}>
+          {
+            this.state.items.map((item, i) => {
+              var backgroundColor;
+              if (this.state.newIndex == i) {
+                backgroundColor = 'red';
+              } else {
+                backgroundColor = '#eaeaea';
+              }
+              return (
+                <View
+                  {...this._itemPanResponder.panHandlers}
+                  style={[styles.itemView, {"backgroundColor": backgroundColor}]}
+                  key={i}>
                   <Text style={styles.text}>{item}</Text>
-                  </View>
-                );
-              })
-            }
-          </View>
+                </View>
+              );
+            })
+          }
         </ScrollView>
       </View>
     );
@@ -180,9 +167,6 @@ var styles = StyleSheet.create({
   },
   scrollView: {
     height: 300
-  },
-  itemViewWrapper: {
-    // ...
   },
   itemView: {
     margin: 7,
