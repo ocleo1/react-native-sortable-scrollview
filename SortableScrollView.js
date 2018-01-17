@@ -44,7 +44,8 @@ var SortableScrollView = React.createClass({
         contentOffsetY: 0,
         scrollViewTop: 0,
         timer: 0,
-        moveable: false
+        moveable: false,
+        scrollEnabled: true
       }
   },
 
@@ -72,6 +73,7 @@ var SortableScrollView = React.createClass({
         self.state.newIndex = self.state.currentItemIndex + movedPosition;
         // insert item to new position
         self.state.items.splice(self.state.newIndex, 0, currentItem);
+        self.state.scrollEnabled = false;
         self.setState(self.state);
       },
       onPanResponderRelease: (evt, gs)=>{
@@ -79,6 +81,7 @@ var SortableScrollView = React.createClass({
         self.clearInterval(self.timerId);
         self.state.timer = 0;
         self.state.moveable = false;
+        self.state.scrollEnabled = true;
         delete self.state.newIndex; // reset background color
         self.setState(self.state);
       },
@@ -94,6 +97,7 @@ var SortableScrollView = React.createClass({
         self.clearInterval(self.timerId);
         self.state.timer = 0;
         self.state.moveable = false;
+        self.state.scrollEnabled = true;
         delete self.state.newIndex; // reset background color
         self.setState(self.state);
       }
@@ -133,6 +137,7 @@ var SortableScrollView = React.createClass({
           ref="scrollView"
           style={styles.scrollView}
           onScroll={this._onScroll}
+          scrollEnabled={this.state.scrollEnabled}
           scrollEventThrottle={200}>
           {
             this.state.items.map((item, i) => {
