@@ -24,7 +24,7 @@ var {
 
 var UIManager = NativeModules.UIManager;
 
-const LONG_PRESS_THRESHOLD = 100;
+const LONG_PRESS_THRESHOLD = 500;
 const INTERVAL = 15;
 const ITEM_VIEW_HEIGHT = 89; // marginTop + marginBottom + paddingTop + paddingBottom + itemHeight + 1
 const SENSITIVE_COEFFICIENT = 0.768; // bigger the coefficient, lower the move sensitive
